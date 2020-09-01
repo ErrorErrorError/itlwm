@@ -18,7 +18,7 @@
 #include "IoctlId.h"
 
 #define IOCTL_MASK 0x800000
-#define IOCTL_VERSION 1
+#define IOCTL_VERSION 2
 #define NWID_LEN 32
 #define WPA_KEY_LEN 128
 
@@ -38,20 +38,6 @@ enum itl_phy_mode {
     ITL80211_MODE_11N,
     ITL80211_MODE_11AC,
     ITL80211_MODE_11AX
-};
-
-struct ioctl_sta_info {
-    unsigned int version;
-    enum itl_phy_mode op_mode;
-    int max_mcs;
-    int cur_mcs;
-    uint channel;
-    uint16_t band_width;//20 40 80 160
-    int16_t rssi;
-    int16_t noise;
-    uint rate;
-    unsigned char ssid[NWID_LEN];
-    uint8_t bssid[ETHER_ADDR_LEN];
 };
 
 struct ioctl_power {
@@ -142,11 +128,38 @@ enum itl80211_proto {
  * 802.11 Authentication and Key Management Protocols.
  */
 enum itl80211_akm {
-    ITL80211_AKM_NONE        = 0x00000000,
-    ITL80211_AKM_8021X        = 0x00000001,
-    ITL80211_AKM_PSK        = 0x00000002,
-    ITL80211_AKM_SHA256_8021X    = 0x00000004,    /* 11w */
-    ITL80211_AKM_SHA256_PSK    = 0x00000008    /* 11w */
+    ITL80211_AKM_NONE           = 0x00000000,
+    ITL80211_AKM_8021X          = 0x00000001,
+    ITL80211_AKM_PSK            = 0x00000002,
+    ITL80211_AKM_SHA256_8021X   = 0x00000004,    /* 11w */
+    ITL80211_AKM_SHA256_PSK     = 0x00000008     /* 11w */
+};
+
+struct itl80211_security_info {
+    unsigned int supported_rsnprotos;   //itl80211_proto
+    unsigned int rsn_protos;            //itl80211_wpa_proto
+    unsigned int supported_rsnakms;     //itl80211_akm
+    unsigned int rsn_akms;              //rsn_akms
+    unsigned int rsn_ciphers;
+    enum itl80211_cipher    rsn_groupcipher;
+    enum itl80211_cipher    rsn_groupmgmtcipher;
+    u_int16_t               ni_rsncaps;
+    enum itl80211_cipher    ni_rsncipher;
+};
+
+struct ioctl_sta_info {
+    unsigned int version;
+    enum itl_phy_mode op_mode;
+    int max_mcs;
+    int cur_mcs;
+    uint channel;
+    uint16_t band_width;//20 40 80 160
+    int16_t rssi;
+    int16_t noise;
+    uint rate;
+    unsigned char ssid[NWID_LEN];
+    uint8_t bssid[ETHER_ADDR_LEN];
+    struct itl80211_security_info security;
 };
 
 struct ioctl_network_info {
@@ -155,16 +168,8 @@ struct ioctl_network_info {
     int16_t rssi;
     uint8_t bssid[ETHER_ADDR_LEN];
     uint32_t channel;
-    unsigned int supported_rsnprotos;   //itl80211_proto
-    unsigned int rsn_protos;    //itl80211_wpa_proto
-    unsigned int supported_rsnakms; //itl80211_akm
-    unsigned int rsn_akms;  //rsn_akms
-    unsigned int rsn_ciphers;
-    enum itl80211_cipher    rsn_groupcipher;
-    enum itl80211_cipher    rsn_groupmgmtcipher;
-    u_int16_t        ni_rsncaps;
-    enum itl80211_cipher    ni_rsncipher;
-    uint32_t recv_timestamp;
+    struct itl80211_security_info security;
+    uint32_t                recv_timestamp;
 };
 
 #endif /* Common_h */

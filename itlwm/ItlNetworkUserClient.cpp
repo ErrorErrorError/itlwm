@@ -127,6 +127,15 @@ sSTA_INFO(OSObject* target, void* data, bool isSet)
     st->rssi = -(0 - IWM_MIN_DBM - ic_bss->ni_rssi);
     st->noise = that->fSoft->sc_noise;
     st->rate = ic_bss->ni_rates.rs_rates[ic_bss->ni_txrate];
+    st->security.ni_rsncaps = ic_bss->ni_capinfo;
+    st->security.ni_rsncipher = (enum itl80211_cipher)ic->ic_bss->ni_rsncipher;
+    st->security.rsn_akms = ic_bss->ni_rsnakms;
+    st->security.rsn_ciphers = ic_bss->ni_rsnciphers;
+    st->security.rsn_protos = ic_bss->ni_rsnprotos;
+    st->security.rsn_groupcipher = (enum itl80211_cipher)ic_bss->ni_rsngroupcipher;
+    st->security.rsn_groupmgmtcipher = (enum itl80211_cipher)ic_bss->ni_rsngroupmgmtcipher;
+    st->security.supported_rsnakms = ic_bss->ni_supported_rsnprotos;
+    st->security.supported_rsnprotos = ic_bss->ni_rsnakms;
     memset(st->ssid, 0, sizeof(st->ssid));
     bcopy(ic->ic_des_essid, st->ssid, ic->ic_des_esslen);
     memset(st->bssid, 0, sizeof(st->bssid));
@@ -240,16 +249,16 @@ sSCAN_RESULT(OSObject* target, void* data, bool isSet)
     }
     bzero(ni, sizeof(*ni));
     
-    ni->ni_rsncaps = that->fNextNodeToSend->ni_capinfo;;
     ni->channel = ieee80211_chan2ieee(&that->fSoft->sc_ic, that->fNextNodeToSend->ni_chan);
-    ni->ni_rsncipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsncipher;
-    ni->rsn_akms = that->fNextNodeToSend->ni_rsnakms;
-    ni->rsn_ciphers = that->fNextNodeToSend->ni_rsnciphers;
-    ni->rsn_protos = that->fNextNodeToSend->ni_rsnprotos;
-    ni->rsn_groupcipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsngroupcipher;
-    ni->rsn_groupmgmtcipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsngroupmgmtcipher;
-    ni->supported_rsnakms = that->fNextNodeToSend->ni_supported_rsnakms;
-    ni->supported_rsnprotos = that->fNextNodeToSend->ni_supported_rsnprotos;
+    ni->security.ni_rsncaps = that->fNextNodeToSend->ni_capinfo;
+    ni->security.ni_rsncipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsncipher;
+    ni->security.rsn_akms = that->fNextNodeToSend->ni_rsnakms;
+    ni->security.rsn_ciphers = that->fNextNodeToSend->ni_rsnciphers;
+    ni->security.rsn_protos = that->fNextNodeToSend->ni_rsnprotos;
+    ni->security.rsn_groupcipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsngroupcipher;
+    ni->security.rsn_groupmgmtcipher = (enum itl80211_cipher)that->fNextNodeToSend->ni_rsngroupmgmtcipher;
+    ni->security.supported_rsnakms = that->fNextNodeToSend->ni_supported_rsnakms;
+    ni->security.supported_rsnprotos = that->fNextNodeToSend->ni_supported_rsnprotos;
     ni->noise = 0;
     ni->rssi = -(0 - IWM_MIN_DBM - that->fNextNodeToSend->ni_rssi);
     memcpy(ni->bssid, that->fNextNodeToSend->ni_bssid, 6);
