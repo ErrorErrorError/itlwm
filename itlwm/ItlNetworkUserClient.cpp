@@ -134,8 +134,8 @@ sSTA_INFO(OSObject* target, void* data, bool isSet)
     st->security.rsn_protos = ic_bss->ni_rsnprotos;
     st->security.rsn_groupcipher = (enum itl80211_cipher)ic_bss->ni_rsngroupcipher;
     st->security.rsn_groupmgmtcipher = (enum itl80211_cipher)ic_bss->ni_rsngroupmgmtcipher;
-    st->security.supported_rsnakms = ic_bss->ni_supported_rsnprotos;
-    st->security.supported_rsnprotos = ic_bss->ni_rsnakms;
+    st->security.supported_rsnakms = ic_bss->ni_supported_rsnakms;
+    st->security.supported_rsnprotos = ic_bss->ni_supported_rsnprotos;
     memset(st->ssid, 0, sizeof(st->ssid));
     bcopy(ic->ic_des_essid, st->ssid, ic->ic_des_esslen);
     memset(st->bssid, 0, sizeof(st->bssid));
