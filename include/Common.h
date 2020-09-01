@@ -135,7 +135,18 @@ enum itl80211_akm {
     ITL80211_AKM_SHA256_PSK     = 0x00000008     /* 11w */
 };
 
-struct itl80211_security_info {
+struct ioctl_network_info {
+    unsigned int version;
+    unsigned char ssid[NWID_LEN];
+    int16_t noise;
+    int16_t rssi;
+    uint8_t bssid[ETHER_ADDR_LEN];
+    uint32_t channel;
+    enum itl_phy_mode op_mode;
+    int max_mcs;
+    int cur_mcs;
+    uint16_t band_width;                //20 40 80 160
+    uint rate;
     unsigned int supported_rsnprotos;   //itl80211_proto
     unsigned int rsn_protos;            //itl80211_wpa_proto
     unsigned int supported_rsnakms;     //itl80211_akm
@@ -145,30 +156,6 @@ struct itl80211_security_info {
     enum itl80211_cipher    rsn_groupmgmtcipher;
     u_int16_t               ni_rsncaps;
     enum itl80211_cipher    ni_rsncipher;
-};
-
-struct ioctl_sta_info {
-    unsigned int version;
-    enum itl_phy_mode op_mode;
-    int max_mcs;
-    int cur_mcs;
-    uint channel;
-    uint16_t band_width;//20 40 80 160
-    int16_t rssi;
-    int16_t noise;
-    uint rate;
-    unsigned char ssid[NWID_LEN];
-    uint8_t bssid[ETHER_ADDR_LEN];
-    struct itl80211_security_info security;
-};
-
-struct ioctl_network_info {
-    unsigned char ssid[NWID_LEN];
-    int16_t noise;
-    int16_t rssi;
-    uint8_t bssid[ETHER_ADDR_LEN];
-    uint32_t channel;
-    struct itl80211_security_info security;
     uint32_t                recv_timestamp;
 };
 

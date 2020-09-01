@@ -52,7 +52,8 @@ private:
     static IOReturn sSCAN_RESULT(OSObject* target, void* data, bool isSet);
     static IOReturn sTX_POWER_LEVEL(OSObject* target, void* data, bool isSet);
     static const IOControlMethodAction sMethods[IOCTL_ID_MAX];
-    
+    static void set_network_data(ieee80211com *sc_ic, ioctl_network_info *ni, ieee80211_node *node);
+
 private:
     task_t fTask;
     itlwmx *fDriver;
